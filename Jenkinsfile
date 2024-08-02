@@ -19,7 +19,7 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    docker.withRegistry('https://hub.docker.com/u/goodnessmark/', 'DOCKERHUB_CREDENTIALS') {
+                    docker.withRegistry('https://hub.docker.com/u/goodnessmark/', 'DockerPat') {
                         sh 'docker push goodnessmark/frontend:8'
                     }
                 }
