@@ -1,44 +1,35 @@
 pipeline {
     agent any
-
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerPat')
-        DOCKER_IMAGE = 'goodnessmark/frontend'
     }
-
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the repository from GitHub
-                git url: 'https://github.com/Goodyoma/BOLE_FESTIVAL.git', branch: 'master'
+                git 'https://github.com/Goodyoma/BOLE_FESTIVAL.git'
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using the Dockerfile in the repository
-                    docker.build("${env.DOCKER_IMAGE}:${env.BUILD_ID}")
+                    sh 'docker build -t goodnessmark/frontend:8 .'
                 }
             }
         }
-
         stage('Push to DockerHub') {
             steps {
                 script {
-                    // Push the Docker image to DockerHub
-                    docker.withRegistry('https://index.docker.io/v1/', 'DockerPat') {
-                        docker.image("${env.DOCKER_IMAGE}:${env.BUILD_ID}").push()
+                    docker.withRegistry('https://hub.docker.com/u/goodnessmark/', 'DOCKERHUB_CREDENTIALS') {
+                        sh 'docker push goodnessmark/frontend:8'
                     }
                 }
             }
         }
     }
-
     post {
         always {
-            // Clean up the workspace after the build
             cleanWs()
         }
     }
 }
+
