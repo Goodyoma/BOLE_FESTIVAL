@@ -19,8 +19,8 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    retry(3) {
-                        docker.withRegistry('https://index.docker.io/v1/', 'DockerPat') {
+                    withDockerRegistry(credentialsId: 'DockerPat', url: 'https://index.docker.io/v1/') {
+                        retry(3) {
                             sh 'docker push goodnessmark/frontend:8'
                         }
                     }
