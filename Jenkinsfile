@@ -12,7 +12,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t goodnessmark/frontend:8 .'
+                    sh ' sudo docker build -t goodnessmark/frontend:8 .'
                 }
             }
         }
